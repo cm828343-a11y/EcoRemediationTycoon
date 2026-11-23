@@ -9,7 +9,7 @@ namespace EcoRemediationTycoon.UI
         public Text dateText;
         public Button speed1xButton;
         public Button speed4xButton;
-        public Button speed16xButton;
+        public Button speed8xButton;
 
         private TimeManager timeManager;
 
@@ -24,7 +24,7 @@ namespace EcoRemediationTycoon.UI
 
             if (speed1xButton) speed1xButton.onClick.AddListener(() => SetSpeed(1f));
             if (speed4xButton) speed4xButton.onClick.AddListener(() => SetSpeed(4f));
-            if (speed16xButton) speed16xButton.onClick.AddListener(() => SetSpeed(16f));
+            if (speed8xButton) speed8xButton.onClick.AddListener(() => SetSpeed(8f));
         }
 
         private void UpdateDate(int year, int month)
@@ -36,7 +36,7 @@ namespace EcoRemediationTycoon.UI
         private void SetSpeed(float scale)
         {
             timeManager?.SetTimeScale(scale);
-            Debug.Log($"Time scale set to {scale}x");
+            Debug.Log($"Time scale set to {scale}x (target ~15-30 min per level at 4x-8x)");
         }
 
         private void OnDestroy()
