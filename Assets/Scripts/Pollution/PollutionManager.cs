@@ -26,6 +26,9 @@ namespace EcoRemediationTycoon.Pollution
 
             if (currentContamination <= 0f)
             {
+                var levelManager = FindObjectOfType<LevelManager>();
+                levelManager?.CompleteCurrentLevel();
+
                 GameManager.Instance?.CompleteLevel();
             }
         }
