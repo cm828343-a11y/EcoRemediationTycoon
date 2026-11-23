@@ -14,6 +14,9 @@ namespace EcoRemediationTycoon.UI
         private void Start()
         {
             levelManager = FindObjectOfType<LevelManager>();
+            if (levelManager != null)
+                levelManager.OnLevelsChanged += Refresh;
+
             Refresh();
         }
 
@@ -26,8 +29,9 @@ namespace EcoRemediationTycoon.UI
 
             for (int i = 0; i < levelManager.levels.Count; i++)
             {
-                int index = i; // capture for closure
+                int index = i;
                 var config = levelManager.levels[i];
+                bool unlocked = levelManager.IsUnlocked(index);
 
                 if (levelButtonPrefab == null) continue;
 
@@ -36,11 +40,25 @@ namespace EcoRemediationTycoon.UI
                 var label = go.GetComponentInChildren<Text>();
 
                 if (label)
-                    label.text = $"{i + 1}. {config.levelName}\n({config.pollutionType})";
+                {
+                    string status = unlocked ? "" : " [LOCKED]";
+                    label.text = $"{i + 1}. {config.levelName}{status}\n({config.pollutionType})";
+                    label.color = unlocked ? Color.white : Color.gray;
+                }
 
                 if (btn)
-                    btn.onClick.AddListener(() => levelManager.LoadLevel(index));
+                {
+                    btn.interactable = unlocked;
+                    if (unlocked)
+                        btn.onClick.AddListener(() => levelManager.LoadLevel(index));
+                }
             }
+        }
+
+        private void OnDestroy()
+        {
+            if (levelManager != null)
+                levelManager.OnLevelsChanged -= Refresh;
         }
     }
 }
