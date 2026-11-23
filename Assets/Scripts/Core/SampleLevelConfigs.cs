@@ -1,12 +1,12 @@
 using UnityEngine;
-using System.Collections.Generic;
 using EcoRemediationTycoon.Core;
 
 namespace EcoRemediationTycoon.Core
 {
     /// <summary>
-    /// Generates a full set of sample LevelConfigs at runtime so you can test progression immediately.
-    /// Attach to the same object as LevelManager or call from FirstLaunchManager.
+    /// Generates sample levels with progressive difficulty.
+    /// First two are simple (lower contamination + higher budget).
+    /// Later levels have higher contamination (longer remediation) and tighter budgets.
     /// </summary>
     public class SampleLevelConfigs : MonoBehaviour
     {
@@ -17,14 +17,17 @@ namespace EcoRemediationTycoon.Core
 
             levelManager.levels.Clear();
 
-            levelManager.levels.Add(Create("River Oil Spill", PollutionType.OilSpill, 600, 100f, "A tanker accident has coated the river. Deploy skimmers before the oil spreads further."));
-            levelManager.levels.Add(Create("City Air Crisis", PollutionType.Air, 550, 100f, "Industrial emissions have made the air hazardous. Install scrubbers across the zone."));
-            levelManager.levels.Add(Create("Coastal Water Contamination", PollutionType.Water, 500, 100f, "Runoff is poisoning the bay. Filter the water before the ecosystem collapses."));
-            levelManager.levels.Add(Create("Old Landfill", PollutionType.SolidWaste, 650, 100f, "A neglected landfill is leaching toxins. Cap and collect gases to stabilize it."));
-            levelManager.levels.Add(Create("Aquifer Threat", PollutionType.Groundwater, 700, 100f, "Chemicals are seeping into the groundwater. Extract and treat before wells are lost."));
-            levelManager.levels.Add(Create("Highway Noise Zone", PollutionType.Noise, 450, 100f, "Constant traffic noise is damaging the nearby forest. Install barriers to restore quiet."));
+            // Level 1 & 2 - Simple / short
+            levelManager.levels.Add(Create("Small Creek Spill", PollutionType.OilSpill, 800, 60f, "A minor spill in a small creek. Easy cleanup to learn the basics."));
+            levelManager.levels.Add(Create("Factory Air Leak", PollutionType.Air, 750, 65f, "A localized air problem. Place a few scrubbers and finish quickly."));
 
-            Debug.Log($"Generated {levelManager.levels.Count} sample levels");
+            // Level 3+ - Increasing difficulty and length
+            levelManager.levels.Add(Create("Coastal Water Contamination", PollutionType.Water, 550, 100f, "Runoff is poisoning the bay. More equipment and time required."));
+            levelManager.levels.Add(Create("Old Landfill", PollutionType.SolidWaste, 500, 110f, "A large neglected landfill. Remediation will take longer."));
+            levelManager.levels.Add(Create("Deep Aquifer Threat", PollutionType.Groundwater, 480, 120f, "Chemicals have reached the aquifer. Expect a lengthy extraction process."));
+            levelManager.levels.Add(Create("Major Highway Noise", PollutionType.Noise, 450, 100f, "Extensive noise pollution. Multiple barriers needed over many months."));
+
+            Debug.Log($"Generated {levelManager.levels.Count} progressive levels (first 2 unlocked)");
             levelManager.LoadLevel(0);
         }
 
