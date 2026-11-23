@@ -4,9 +4,21 @@ namespace EcoRemediationTycoon.Economy
 {
     public class EconomyManager : MonoBehaviour
     {
+        public static EconomyManager Instance { get; private set; }
+
         public int currentMoney = 500;
 
         public event System.Action<int> OnMoneyChanged;
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+        }
 
         public bool CanAfford(int cost)
         {
