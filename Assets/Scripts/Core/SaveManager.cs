@@ -10,6 +10,7 @@ namespace EcoRemediationTycoon.Core
     {
         public int money;
         public int currentLevelIndex;
+        public int highestUnlockedIndex;
         public bool advancedUnlocked;
         public int year;
         public int month;
@@ -39,10 +40,13 @@ namespace EcoRemediationTycoon.Core
 
         public void Save()
         {
+            var levelManager = FindObjectOfType<LevelManager>();
+
             var data = new SaveData
             {
                 money = EconomyManager.Instance != null ? EconomyManager.Instance.currentMoney : 500,
-                currentLevelIndex = FindObjectOfType<LevelManager>()?.currentLevelIndex ?? 0,
+                currentLevelIndex = levelManager != null ? levelManager.currentLevelIndex : 0,
+                highestUnlockedIndex = levelManager != null ? levelManager.highestUnlockedIndex : 1,
                 advancedUnlocked = UnlockManager.Instance != null &&
                                    EconomyManager.Instance != null &&
                                    EconomyManager.Instance.currentMoney >= UnlockManager.Instance.advancedTechThreshold,
@@ -66,8 +70,12 @@ namespace EcoRemediationTycoon.Core
                 EconomyManager.Instance.currentMoney = data.money;
 
             var levelManager = FindObjectOfType<LevelManager>();
-            if (levelManager && data.currentLevelIndex < levelManager.levels.Count)
-                levelManager.LoadLevel(data.currentLevelIndex);
+            if (levelManager)
+            {
+                levelManager.highestUnlockedIndex = Mathf.Max(1, data.highestUnlockedIndex);
+                if (data.currentLevelIndex < levelManager.levels.Count)
+                    levelManager.LoadLevel(data.currentLevelIndex);
+            }
 
             if (TimeManager.Instance)
             {
