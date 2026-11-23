@@ -8,19 +8,20 @@ namespace EcoRemediationTycoon.Core
         public static TimeManager Instance { get; private set; }
 
         [Header("Time Settings")]
-        public float realSecondsPerGameWeek = 1f; // Default speed: 1 real second = 1 game week
+        // Tuned so a typical cleanup (with several units) takes ~15-30 real minutes at 4x-8x boost
+        public float realSecondsPerGameWeek = 8f; // Slower base: 8 real seconds = 1 game week
         public int startYear = 2026;
-        public int startMonth = 1; // 1-12
+        public int startMonth = 1;
 
         [Header("Current Time")]
         public int currentYear;
         public int currentMonth;
-        public float currentWeekFraction; // 0-1 within month (approx)
+        public float currentWeekFraction;
 
-        public float timeScale = 1f; // 1 = normal, higher = faster
+        public float timeScale = 1f; // 1 = normal, 4-8 recommended for play
 
-        public event Action<int, int> OnMonthChanged; // year, month
-        public event Action<float> OnTimeAdvanced;   // delta game weeks
+        public event Action<int, int> OnMonthChanged;
+        public event Action<float> OnTimeAdvanced;
 
         private float accumulatedGameWeeks;
 
@@ -44,7 +45,6 @@ namespace EcoRemediationTycoon.Core
 
             OnTimeAdvanced?.Invoke(deltaGameWeeks);
 
-            // Advance calendar (rough: 4.33 weeks per month)
             while (accumulatedGameWeeks >= 4.33f)
             {
                 accumulatedGameWeeks -= 4.33f;
@@ -75,7 +75,6 @@ namespace EcoRemediationTycoon.Core
             return $"{currentMonth:00}/{currentYear}";
         }
 
-        // How many real seconds for a given number of game months at current speed
         public float GetRealSecondsForMonths(float months)
         {
             float gameWeeks = months * 4.33f;
