@@ -3,14 +3,14 @@ using EcoRemediationTycoon.Core;
 
 namespace EcoRemediationTycoon.Remediation
 {
-    public class LandfillCoverSystem : RemediationEquipment
+    public class LandfillCoverSystem : TimedRemediationEquipment
     {
         protected override void Start()
         {
             base.Start();
             equipmentName = "Landfill Cover System";
             supportedPollutionType = PollutionType.SolidWaste;
-            treatmentRatePerSecond = 3.5f;
+            treatmentPerGameMonth = 3.0f;
             cost = 180;
             isAdvanced = false;
         }
