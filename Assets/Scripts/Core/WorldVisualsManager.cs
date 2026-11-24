@@ -43,8 +43,6 @@ namespace EcoRemediationTycoon.Core
                 OnSeasonChanged?.Invoke(currentSeason);
                 Debug.Log($"Season changed to {GetSeasonName(currentSeason)}");
             }
-
-            UpdateLongTermVisuals();
         }
 
         private void Update()
